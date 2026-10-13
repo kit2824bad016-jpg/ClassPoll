@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ClassPoll{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script defer src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-icon">CP</span> ClassPoll</a>
+  <nav>
+    {% if session.get('user_id') %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      <span class="nav-user">{{ session.get('name') }} · {{ session.get('role')|title }}</span>
+      <form class="inline-form" method="post" action="{{ url_for('logout') }}">
+        <button class="btn btn-ghost btn-small" type="submit">Log out</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('login') }}">Log in</a>
+      <a class="btn btn-primary btn-small" href="{{ url_for('register') }}">Create account</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-stack">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>ClassPoll · Smart classroom participation, made simple</footer>
+</body>
+</html>

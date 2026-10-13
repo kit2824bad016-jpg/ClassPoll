@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Student dashboard | ClassPoll{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">STUDENT WORKSPACE</div><h1>Hi, {{ session.get('name') }} 👋</h1><p class="muted">Join your class and keep up with classroom polls.</p></div></div>
+<div class="dashboard-grid">
+  <section class="panel">
+    <div class="section-title"><div><h2>Join a class</h2><p class="muted">Ask your teacher for the class code.</p></div><span class="round-icon">＋</span></div>
+    <form method="post" action="{{ url_for('join_class') }}" class="inline-create">
+      <input name="class_code" required maxlength="12" placeholder="Enter class code">
+      <button class="btn btn-primary" type="submit">Join class</button>
+    </form>
+  </section>
+  <section class="stat-card"><span class="stat-label">Joined classes</span><strong>{{ classes|length }}</strong><span class="stat-note">Your classrooms</span></section>
+</div>
+<div class="section-title section-gap"><div><h2>Available polls</h2><p class="muted">Vote before a poll closes.</p></div></div>
+{% if polls %}
+<div class="poll-list">
+{% for p in polls %}
+  <article class="panel poll-row">
+    <div class="poll-row-icon">◉</div><div class="poll-row-main"><span class="eyebrow">{{ p.class_name }}</span><h3>{{ p.question }}</h3><p class="muted">{{ 'Voted' if p.has_voted else 'Not voted yet' }} · {{ 'Closed' if p.is_closed else 'Poll' }}</p></div>
+    <a class="btn btn-light" href="{{ url_for('poll_detail', poll_id=p.id) }}">Open poll →</a>
+  </article>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div class="empty-icon">◉</div><h3>No polls to show</h3><p>Join a class using the code from your teacher. Class polls will appear here.</p></div>
+{% endif %}
+{% endblock %}

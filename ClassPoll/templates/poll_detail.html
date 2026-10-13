@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Poll | ClassPoll{% endblock %}
+{% block content %}
+<div class="breadcrumb"><a href="{{ url_for('class_detail', class_id=poll.class_id) }}">{{ poll.class_name }}</a> / Poll</div>
+<section class="panel poll-detail">
+  <div class="poll-detail-top"><span class="eyebrow">{{ poll.class_name }}</span><span class="status-pill {{ 'status-closed' if not is_open else 'status-open' }}">{{ 'Closed' if not is_open else 'Active' }}</span></div>
+  <h1>{{ poll.question }}</h1>
+  {% if poll.closes_at %}<p class="muted">Closes at: {{ poll.closes_at.strftime('%d %b %Y, %I:%M %p') }}</p>{% endif %}
+  {% if session.get('role') == 'student' and not has_voted and is_open %}
+  <form method="post" action="{{ url_for('cast_vote', poll_id=poll.id) }}" data-confirm="Submit your vote? You cannot vote again.">
+    <div class="vote-options">
+    {% for option in options %}
+      <label class="vote-option"><input type="radio" name="option_id" value="{{ option.id }}" required><span>{{ option.option_text }}</span></label>
+    {% endfor %}
+    </div>
+    <button class="btn btn-primary" type="submit">Submit vote</button>
+  </form>
+  {% elif session.get('role') == 'student' and has_voted %}
+    <div class="notice success-notice">✓ Your vote has been recorded. You can only vote once in this poll.</div>
+  {% elif session.get('role') == 'student' and not is_open %}
+    <div class="notice">This poll is closed. Voting is no longer available.</div>
+  {% endif %}
+  {% if show_results %}
+  <div class="results-block">
+    <div class="section-title"><div><h2>Poll results</h2><p class="muted">{{ total_votes }} total responses</p></div></div>
+    {% for result in results %}
+      <div class="result-row"><div class="result-label"><span>{{ result.option_text }}</span><strong>{{ result.vote_count }} · {{ result.percentage }}%</strong></div><div class="result-track"><div class="result-fill" style="width: {{ result.percentage }}%"></div></div></div>
+    {% else %}
+      <p class="muted">No votes yet.</p>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="notice">Results are hidden until the poll closes or you submit your vote.</div>
+  {% endif %}
+  {% if session.get('role') == 'teacher' %}
+  <div class="poll-admin-actions">
+    <a class="btn btn-light" href="{{ url_for('participation', poll_id=poll.id) }}">View participation</a>
+    {% if is_open %}<form method="post" action="{{ url_for('close_poll', poll_id=poll.id) }}" data-confirm="Close this poll now?"><button class="btn btn-danger" type="submit">Close poll</button></form>{% endif %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

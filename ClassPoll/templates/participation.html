@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Participation | ClassPoll{% endblock %}
+{% block content %}
+<div class="breadcrumb"><a href="{{ url_for('poll_detail', poll_id=poll.id) }}">{{ poll.question }}</a> / Participation</div>
+<div class="page-heading"><div><div class="eyebrow">PARTICIPATION REPORT</div><h1>Who has responded?</h1><p class="muted">{{ poll.question }}</p></div><a class="btn btn-primary" href="{{ url_for('participation_csv', poll_id=poll.id) }}">↓ Export CSV</a></div>
+<div class="stats-row">
+  <div class="stat-card"><span class="stat-label">Students</span><strong>{{ total }}</strong></div>
+  <div class="stat-card"><span class="stat-label">Voted</span><strong>{{ voted_count }}</strong></div>
+  <div class="stat-card"><span class="stat-label">Pending</span><strong>{{ total - voted_count }}</strong></div>
+  <div class="stat-card"><span class="stat-label">Participation</span><strong>{{ ((voted_count * 100 / total)|round|int) if total else 0 }}%</strong></div>
+</div>
+<div class="panel table-panel">
+  <div class="table-head"><h2>Student status</h2><input id="table-search" class="search-input" placeholder="Search name or email..."></div>
+  <div class="table-scroll"><table id="participation-table"><thead><tr><th>Student</th><th>Email</th><th>Status</th></tr></thead><tbody>
+  {% for row in rows %}<tr><td>{{ row.name }}</td><td>{{ row.email }}</td><td><span class="status-pill {{ 'status-open' if row.status == 'Voted' else 'status-pending' }}">{{ row.status }}</span></td></tr>{% else %}<tr><td colspan="3" class="empty-cell">No students have joined this class yet.</td></tr>{% endfor %}
+  </tbody></table></div>
+  <p class="muted privacy-note">This report shows participation status only, not each student's selected answer.</p>
+</div>
+{% endblock %}

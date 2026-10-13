@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}ClassPoll | Classroom polls{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">SMART CLASSROOM PARTICIPATION</div>
+    <h1>Every voice counts.<br><span>Every response is tracked.</span></h1>
+    <p>Create classroom polls, collect student votes and understand participation from one simple dashboard.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ url_for('register') }}">Get started</a>
+      <a class="btn btn-light" href="{{ url_for('login') }}">I already have an account</a>
+    </div>
+    <div class="mini-points"><span>✓ Teacher & student roles</span><span>✓ Participation reports</span><span>✓ One vote per poll</span></div>
+  </div>
+  <div class="preview-card">
+    <div class="preview-head"><span class="status-dot"></span> Example classroom poll <span class="live-tag">ACTIVE</span></div>
+    <h3>Which topic should we revise next?</h3>
+    <div class="fake-option"><span>SQL Joins</span><b>48%</b><div class="bar"><i style="width:48%"></i></div></div>
+    <div class="fake-option"><span>Normalization</span><b>32%</b><div class="bar"><i style="width:32%"></i></div></div>
+    <div class="fake-option"><span>Transactions</span><b>20%</b><div class="bar"><i style="width:20%"></i></div></div>
+    <div class="preview-foot"><span>Sample data only</span><span>Participation dashboard</span></div>
+  </div>
+</section>
+<section class="feature-grid">
+  <article class="feature-card"><div class="feature-icon purple">▤</div><h3>Create polls</h3><p>Set a question, answer options and an optional closing time.</p></article>
+  <article class="feature-card"><div class="feature-icon blue">◉</div><h3>Track participation</h3><p>Quickly identify who has voted and who still needs to respond.</p></article>
+  <article class="feature-card"><div class="feature-icon green">↗</div><h3>Review results</h3><p>View response counts and percentages, then export a CSV report.</p></article>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Teacher dashboard | ClassPoll{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">TEACHER WORKSPACE</div><h1>Welcome, {{ session.get('name') }} 👋</h1><p class="muted">Manage your classes and classroom polls.</p></div></div>
+<div class="dashboard-grid">
+  <section class="panel">
+    <div class="section-title"><div><h2>Create a class</h2><p class="muted">Students join with the class code.</p></div><span class="round-icon">＋</span></div>
+    <form method="post" action="{{ url_for('create_class') }}" class="inline-create">
+      <input name="name" maxlength="120" required placeholder="e.g. WAD - Section A">
+      <button class="btn btn-primary" type="submit">Create class</button>
+    </form>
+  </section>
+  <section class="stat-card"><span class="stat-label">Your classes</span><strong>{{ classes|length }}</strong><span class="stat-note">Classes you manage</span></section>
+</div>
+<div class="section-title section-gap"><div><h2>Your classes</h2><p class="muted">Open a class to create polls and view participation.</p></div></div>
+{% if classes %}
+<div class="class-grid">
+{% for c in classes %}
+  <article class="panel class-card">
+    <div class="class-card-top"><span class="class-symbol">▦</span><span class="code-pill">CODE: {{ c.class_code }}</span></div>
+    <h3>{{ c.name }}</h3>
+    <p class="muted">{{ c.student_count }} students · {{ c.poll_count }} polls</p>
+    <a class="btn btn-light btn-full" href="{{ url_for('class_detail', class_id=c.id) }}">Open class →</a>
+  </article>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div class="empty-icon">▦</div><h3>No classes yet</h3><p>Create your first class above. Its join code will appear after creation.</p></div>
+{% endif %}
+{% endblock %}

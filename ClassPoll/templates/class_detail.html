@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ classroom.name }} | ClassPoll{% endblock %}
+{% block content %}
+<div class="breadcrumb"><a href="{{ url_for('dashboard') }}">Dashboard</a> / {{ classroom.name }}</div>
+<div class="page-heading"><div><div class="eyebrow">CLASSROOM</div><h1>{{ classroom.name }}</h1><p class="muted">{% if session.get('role') == 'teacher' %}Share this code with your students:{% else %}Class polls and results{% endif %}</p></div>
+{% if session.get('role') == 'teacher' %}<div class="class-code-large">{{ classroom.class_code }}</div>{% endif %}</div>
+{% if session.get('role') == 'teacher' %}<div class="section-actions"><a class="btn btn-primary" href="{{ url_for('create_poll', class_id=classroom.id) }}">＋ Create poll</a></div>{% endif %}
+<div class="section-title section-gap"><div><h2>Poll history</h2><p class="muted">Open a poll to view responses and details.</p></div></div>
+{% if polls %}
+<div class="poll-list">
+{% for p in polls %}
+  <article class="panel poll-row"><div class="poll-row-icon">◉</div><div class="poll-row-main"><h3>{{ p.question }}</h3><p class="muted">{{ p.vote_count }} responses · {{ 'Closed' if p.is_closed else 'Poll' }}</p></div><a class="btn btn-light" href="{{ url_for('poll_detail', poll_id=p.id) }}">View poll →</a></article>
+{% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><h3>No polls yet</h3><p>Create the first poll for this class.</p></div>
+{% endif %}
+{% endblock %}

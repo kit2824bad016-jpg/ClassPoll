@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Create poll | ClassPoll{% endblock %}
+{% block content %}
+<div class="breadcrumb"><a href="{{ url_for('class_detail', class_id=classroom.id) }}">{{ classroom.name }}</a> / Create poll</div>
+<section class="panel form-panel">
+  <div class="eyebrow">NEW CLASSROOM POLL</div><h1>Create a poll</h1><p class="muted">Add a clear question and at least two answer options.</p>
+  <form method="post" id="poll-form">
+    <label>Poll question<textarea name="question" rows="3" maxlength="500" required placeholder="What would you like to ask your class?"></textarea></label>
+    <div class="section-title"><div><h3>Answer options</h3><p class="muted">At least two options are required.</p></div><button class="btn btn-light btn-small" type="button" id="add-option">＋ Add option</button></div>
+    <div id="options-wrap">
+      <label class="option-input">Option 1<input name="options" maxlength="255" required placeholder="First answer"></label>
+      <label class="option-input">Option 2<input name="options" maxlength="255" required placeholder="Second answer"></label>
+    </div>
+    <label>Close poll at (optional)<input type="datetime-local" name="closes_at"></label>
+    <label class="check-label"><input type="checkbox" name="results_visible" checked> Students can see results after voting</label>
+    <button class="btn btn-primary" type="submit">Create poll</button>
+    <a class="btn btn-ghost" href="{{ url_for('class_detail', class_id=classroom.id) }}">Cancel</a>
+  </form>
+</section>
+{% endblock %}
